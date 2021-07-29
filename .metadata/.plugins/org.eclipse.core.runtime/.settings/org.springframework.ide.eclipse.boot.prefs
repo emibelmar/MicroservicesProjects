@@ -1,4 +1,7 @@
 eclipse.preferences.version=1
+org.springframework.ide.eclipse.boot.wizard.PopularityTracker.amqp=1
 org.springframework.ide.eclipse.boot.wizard.PopularityTracker.cloud-config-client=2
+org.springframework.ide.eclipse.boot.wizard.PopularityTracker.cloud-starter-sleuth=3
+org.springframework.ide.eclipse.boot.wizard.PopularityTracker.cloud-starter-zipkin=1
 org.springframework.ide.eclipse.boot.wizard.PopularityTracker.mysql=1
 org.springframework.ide.eclipse.boot.wizard.initializr.url=https\://start.spring.io\n

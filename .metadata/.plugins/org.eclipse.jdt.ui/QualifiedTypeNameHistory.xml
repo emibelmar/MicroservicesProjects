@@ -2,4 +2,5 @@
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="org.junit.Test"/>
     <fullyQualifiedTypeName name="com.formacionbdi.springboot.app.commons.usuarios.models.entity.Usuario"/>
+    <fullyQualifiedTypeName name="brave.Tracer"/>
 </qualifiedTypeNameHistroy>
