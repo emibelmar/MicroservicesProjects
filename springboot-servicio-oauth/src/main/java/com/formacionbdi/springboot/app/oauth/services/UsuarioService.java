@@ -17,33 +17,40 @@ import org.springframework.stereotype.Service;
 import com.formacionbdi.springboot.app.commons.usuarios.models.entity.Usuario;
 import com.formacionbdi.springboot.app.oauth.clients.UsuarioFeignClient;
 
+import brave.Tracer;
+
 @Service
-public class UsuarioService implements IUsuarioService, UserDetailsService{
-	
+public class UsuarioService implements IUsuarioService, UserDetailsService {
+
 	private Logger log = LoggerFactory.getLogger(UsuarioService.class);
-	
+
 	@Autowired
 	private UsuarioFeignClient client;
+
+	@Autowired
+	private Tracer tracer;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Usuario usuario = client.findByUsername(username);
-		
-		if(usuario == null) {
-			log.error("Error en el login, no existe el usuario '"+username+"' en el sistema");
-			throw new UsernameNotFoundException("Error en el login, no existe el usuario '"+username+"' en el sistema");
+
+		if (usuario == null) {
+			log.error("Error en el login, no existe el usuario '" + username + "' en el sistema");
+			throw new UsernameNotFoundException(
+					"Error en el login, no existe el usuario '" + username + "' en el sistema");
 		}
-		
-		List<GrantedAuthority> authorities = usuario.getRoles()
-				.stream()
+
+		List<GrantedAuthority> authorities = usuario.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getNombre()))
-				.peek(authority -> log.info("Role: " + authority.getAuthority()))
-				.collect(Collectors.toList());
-		
-		log.info("Usuario autenticado: " + username);
-		
-		return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, 
-				true, true, authorities);
+				.peek(authority -> log.info("Role: " + authority.getAuthority())).collect(Collectors.toList());
+
+		String mensaje = "Usuario autenticado: " + username;
+		log.info(mensaje);
+
+		tracer.currentSpan().tag("exito.mensaje", mensaje);
+
+		return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, true, true,
+				authorities);
 	}
 
 	@Override
